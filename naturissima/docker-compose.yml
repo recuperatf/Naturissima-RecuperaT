@@ -1,0 +1,29 @@
+version: "3.5"
+
+services:
+  laravel-app:
+    image: recuperat-laravel-docker_laravel-app:latest
+    container_name: naturissima
+    ports:
+      - 8001:80
+    environment:
+      - APACHE_RUN_USER=#1000
+      - APACHE_RUN_GROUP=#1000
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql-db-naturissima
+
+  mysql-db-naturissima:
+    image: mysql:5.7
+    container_name: db_naturissima
+    ports:
+      - 8106:3306
+    volumes:
+      - ./run/var:/var/lib/mysql
+      - ./home_mysql:/home
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=appnaturissima
+      - MYSQL_USER=luis
+      - MYSQL_PASSWORD=123465

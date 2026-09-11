@@ -1,0 +1,30 @@
+<div class="row">
+    {{Form::hidden($name."[$S_order][name]",$S_label)}}
+    {{Form::hidden($name."[$S_order][cie10_id]",isset($ID_cie10)?$ID_cie10:null)}}
+    {{Form::hidden($name."[$S_order][section]",isset($name)?$name:null)}}
+    <div class="col-xl-12" style="text-align: center">
+        {{$S_label}}
+    </div>
+            @foreach($options as $color=>$option)
+            <div class="col-xl-3" style="color: 
+               @php
+                switch ($color) {
+                    case 'y':
+                        echo '#d9cc14';
+                        break;
+                    case 'g':
+                        echo '#20a816';
+                        break;
+                    case 'r':
+                        echo '#961222';
+                        break;
+                    default:
+                        echo '#FFF'
+                        break;
+                }
+               @endphp"
+            >
+                {{Form::radio($name."[$S_order][json_values]",$option)}}<strong><h3>{{$option}}</h3></strong>
+            </div>
+            @endforeach
+        </div>

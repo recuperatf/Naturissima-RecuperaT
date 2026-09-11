@@ -1,0 +1,84 @@
+@extends('layouts.basic')
+@section('content')
+{{Form::model($model,['route'=>['historia.store',$patient_id]])}}
+@if($model)
+{{ method_field('PATCH') }}
+@endif
+@push('css')
+<style type="text/css">
+	.ui-autocomplete {
+	            max-height: 200px;
+	            overflow-y: auto;
+	            overflow-x: hidden;
+	            padding-right: 20px;
+	        } 
+	input[type=radio], input[type=checkbox] {
+	    border: 0px !important;
+	    width: 20px !important;
+	    height: 20px !important;
+	}
+</style>
+@endpush
+@push('javascript')
+<script type="text/javascript">
+	$(function(){
+		$(".autocompletable_cie10").on('input',function(event){
+			$(this).autocomplete({
+				source: function( request, response ) {
+			        $.ajax({
+			          url: "/ajax_get_cie10/"+$(event.target).val(),
+			          method:'get',
+			          success: function( data ) {
+			           		response(data);
+			          	}
+			        });
+			      },
+				minLength: 0,
+				delay: 0,
+				max:10,
+                scroll:true,
+				select:function(event, item){
+			    }
+			}).focus(function () {
+			    $(this).autocomplete("search");
+			});
+		});
+		
+	});
+</script>
+@endpush
+<div class="container">
+	<div class="row">
+		<div class="col-xl-12">
+			@if (session('modifiedSuccess'))
+			    <div class="alert alert-success">
+			        {{ session('modifiedSuccess') }}
+			    </div>
+			@endif
+		</div>
+	</div>
+	<div class=row>
+		<div class="col-xl-12">
+			<h2><strong>VALORACIÓN NÓRDICO</strong></h2>
+		</div>
+		<div class="col-xl-12">
+			<text>El siguiente es un cuestionario estandarizado para la detección y análisis de síntomas músculo esquelético, aplicable en el contexto de estudios ergonómicos o de salud ocupacional con el fin de detectar la existencia de síntomas iniciales, que todavía no han constituido enfermedad o no han llevado aún a consultar al médico. <br/>
+			Su valor radica en que nos da información que permite estimar el nivel de riesgos de manera proactiva y nos permite una actuación precoz. <br/>
+			Las preguntas son de elección múltiple y puede ser aplicado en unas de dos formas. Una es en forma auto- administrado, es decir, es contestado por la propia persona encuestada por sí sola, sin la presencia de un encuestador. La otra forma es ser aplicado por un encuestador, como parte de una entrevista.<br/>
+			El cuestionario a usar es el llamado Cuestionario Nórdico de Kuorinka1 .Las preguntas se concentran en la mayoría de los síntomas que- con frecuencia- se detectan en diferentes actividades económicas.<br/>
+			La fiabilidad de los cuestionarios se ha demostrado aceptable. Algunas características específicas de los esfuerzos realizados en el trabajo se muestran en la frecuencia de las respuestas a los cuestionarios.
+			</text>
+		</div>
+	</div>
+	{{Form::hidden('patient_id',$patient_id)}}
+	@include('valorations.nordic_valoration_sections.')
+	<div class="row">
+		<div class="col-xl-12">
+			<br>
+			{{Form::submit('Aceptar',['class'=>'btn btn-primary', 'disabled'])}}
+			<a href="{{route('pacientes.index')}}" class="btn btn-light">Atras</a>
+		</div>
+	</div>
+</div>
+{{Form::close()}}
+@endsection

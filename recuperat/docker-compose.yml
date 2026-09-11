@@ -1,0 +1,42 @@
+version: '3.5'
+
+services:
+  laravel-app:
+    image: recuperat-laravel-docker_laravel-app:latest
+    container_name: recuperat
+    ports:
+      - 8006:80
+    environment:
+      - APACHE_RUN_USER=#1000
+      - APACHE_RUN_GROUP=#1000
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    volumes:
+      - .:/var/www/html
+    restart: always
+    networks:
+      backend:
+        aliases:
+          - app
+
+  mysql-db-recuperat:
+    image: mysql:5.7
+    container_name: recuperat_db
+    ports:
+    - 6969:3306
+    restart: always
+    volumes:
+      - ./run/var:/var/lib/mysql
+      - ./home_mysql:/home
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=apprecuperat
+      - MYSQL_USER=luis
+      - MYSQL_PASSWORD=123465
+    networks:
+      backend:
+        aliases:
+          - mysql-db-recuperat
+
+networks:
+  backend:
+    name: backend-network
